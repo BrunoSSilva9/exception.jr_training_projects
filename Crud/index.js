@@ -1,46 +1,56 @@
 const express = require('express');
 
-const server = express();
+const app = express();
+const port = 3020;
 
-server.use(express.json());
+const cursos = ['Java Avancado', 'Desenvolvimento de games', 'Phyton'];
 
-const cursos = ['FullStack Master', 'Desenvolvimento de Games', 'Java Avancado'];
+app.use(express.json());
 
-server.get('/cursos/:index', (req, res) => {
-    const { index } = req.params;
-
-    return res.json(cursos[index]);
-})
-
-server.get('/cursos', (req, res) => {
-    return res.json(cursos);
+app.get('/cursos', (req, res) => {
+  res.json(cursos);
 });
 
+app.get('/cursos/:index', (req, res) => {
+  const { index } = req.params;
+  const curso = cursos[index];
 
-server.post('/cursos', (req, res) => {
-    const { name } = req.body;
-    cursos.push(name);
+  if (!curso) {
+    return res.status(404).json({ message: 'Curso não encontrado' });
+  }
 
-    return res.json(cursos);
-})
+  res.json(curso);
+});
 
-server.put('/cursos/:index', (req, res) => {
-    const { index } = req.params;
-    const { name } = req.body;
+app.post('/cursos', (req, res) => {
+  const { name } = req.body;
+  cursos.push(name);
+  res.status(201).json(cursos);
+});
 
-    cursos[index] = name;
+app.put('/cursos/:index', (req, res) => {
+  const { index } = req.params;
+  const { name } = req.body;
 
-    return res.json(cursos);
-})
+  if (index >= cursos.length || index < 0) {
+    return res.status(404).json({ message: 'Curso não encontrado' });
+  }
 
-//Deletar um curso
-server.delete('/cursos/:index', (req, res) => {
-    const { index } = req.params;
-    
-    cursos.splice(index, 1);
-    return res.json({message: 'O curso foi deletado'});
-})
+  cursos[index] = name;
+  res.json(cursos);
+});
 
+app.delete('/cursos/:index', (req, res) => {
+  const { index } = req.params;
 
+  if (index >= cursos.length || index < 0) {
+    return res.status(404).json({ message: 'Curso não encontrado' });
+  }
 
-server.listen(3020);
+  cursos.splice(index, 1);
+  res.json({ message: 'Curso deletado com sucesso' });
+});
+
+app.listen(port, () => {
+  console.log(`Servidor rodando na porta ${port}`);
+});
