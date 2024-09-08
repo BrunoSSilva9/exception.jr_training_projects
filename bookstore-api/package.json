@@ -1,0 +1,15 @@
+{
+  "name": "bookstore-api",
+  "version": "1.0.0",
+  "description": "bookstore api developed in nodejs with mongodb",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bruno Silva",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.6.1"
+  }
+}
